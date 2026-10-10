@@ -75,6 +75,7 @@ export default function Home() {
   const [shareStatus, setShareStatus] = useState("");
   const [isDownloadingCard, setIsDownloadingCard] = useState(false);
   const [downloadStatus, setDownloadStatus] = useState("");
+  const [savedImageDataUrl, setSavedImageDataUrl] = useState("");
   const [shareOrigin, setShareOrigin] = useState(siteOrigin);
   const shareModalRef = useRef<HTMLDialogElement>(null);
 
@@ -164,34 +165,20 @@ export default function Home() {
         emblemDataUrl: await loadEmblemDataUrl(),
       });
       const imageBlob = await renderPassportCardPng(svgMarkup);
+      // Always convert to a data URL — it is compatible with both regular
+      // browsers and restrictive WebViews (Facebook, Instagram, Messenger).
+      const dataUrl = await blobToDataUrl(imageBlob);
 
       if (isInAppBrowser()) {
-        // Facebook / Instagram / Messenger WebViews block blob: URL downloads.
-        // Open the image as a base64 data URL in a new tab so the user can
-        // long-press (mobile) or right-click (desktop) to save it.
-        const dataUrl = await blobToDataUrl(imageBlob);
-        const newTab = window.open();
-        if (newTab) {
-          newTab.document.write(
-            `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Foodie Passport</title></head>` +
-            `<body style="margin:0;background:#1e293b;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;">` +
-            `<p style="color:#f8fafc;font-family:sans-serif;font-size:16px;margin-bottom:12px;">📱 Long-press the image and tap <strong>Save Image</strong> to download.</p>` +
-            `<img src="${dataUrl}" style="max-width:100%;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);" alt="Your Foodie Passport card" />` +
-            `</body></html>`
-          );
-          newTab.document.close();
-          setDownloadStatus("Image opened — long-press to save it.");
-        } else {
-          setDownloadStatus("Please allow pop-ups and try again.");
-        }
+        // In-app WebViews block blob: URLs, <a download>, and window.open().
+        // Show the image in an on-page overlay so the user can long-press to save.
+        setSavedImageDataUrl(dataUrl);
       } else {
-        // Standard browsers: use blob URL + <a download>.
-        const imageUrl = URL.createObjectURL(imageBlob);
+        // Standard browsers: trigger a direct download via <a download>.
         const link = document.createElement("a");
         link.download = "foodie-passport-card.png";
-        link.href = imageUrl;
+        link.href = dataUrl;
         link.click();
-        window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60_000);
         setDownloadStatus("Passport image downloaded.");
       }
     } catch (error) {
@@ -611,6 +598,36 @@ export default function Home() {
           Contact
         </a>
       </footer>
+
+      {/* In-app browser save overlay — shown instead of a blocked download */}
+      {savedImageDataUrl && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Save your passport image"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-start overflow-y-auto bg-slate-950/95 px-4 py-8"
+        >
+          <div className="w-full max-w-sm rounded-3xl bg-slate-800 p-5 shadow-2xl">
+            <p className="mb-1 text-center text-lg font-bold text-white">Save your Passport</p>
+            <p className="mb-4 text-center text-sm text-slate-300">
+              📱 <strong>Long-press the image</strong> below, then tap <strong>Save Image</strong> to download it to your phone.
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={savedImageDataUrl}
+              alt="Your Foodie Passport card"
+              className="w-full rounded-2xl"
+            />
+            <button
+              type="button"
+              onClick={() => setSavedImageDataUrl("")}
+              className="mt-4 w-full rounded-full bg-slate-700 py-3 text-sm font-semibold text-white transition hover:bg-slate-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
