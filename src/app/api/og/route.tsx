@@ -97,13 +97,9 @@ export async function GET(request: Request) {
           <div
             style={{
               position: "absolute",
-              right: 60,
-              bottom: 270,
+              left: 312,
+              top: 477,
               display: "flex",
-              backgroundColor: "rgba(255,255,255,0.7)",
-              border: "3px solid #ffffff",
-              borderRadius: 32,
-              padding: 10,
               width: 520,
               height: 650,
             }}
