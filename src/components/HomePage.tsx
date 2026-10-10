@@ -26,6 +26,26 @@ import useFoodPassportStore from "@/store/useFoodPassportStore";
 
 const divisionOptions = ["All", ...new Set(districts.map((district) => district.division))];
 
+/**
+ * Returns true when running inside a Facebook, Instagram, Messenger, or
+ * similar in-app WebView that blocks blob: URL downloads and <a download>.
+ */
+function isInAppBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  return /FBAN|FBAV|Instagram|Messenger|FB_IAB|FBIOS|MicroMessenger|WebView/.test(ua);
+}
+
+/** Converts a Blob to a base64 data URL string. */
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error ?? new Error("Could not read blob."));
+    reader.readAsDataURL(blob);
+  });
+}
+
 function getFoodKey(districtId: string, foodId: string) {
   return `${districtId}:${foodId}`;
 }
@@ -144,14 +164,36 @@ export default function Home() {
         emblemDataUrl: await loadEmblemDataUrl(),
       });
       const imageBlob = await renderPassportCardPng(svgMarkup);
-      const imageUrl = URL.createObjectURL(imageBlob);
 
-      const link = document.createElement("a");
-      link.download = "foodie-passport-card.png";
-      link.href = imageUrl;
-      link.click();
-      window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60_000);
-      setDownloadStatus("Passport image downloaded.");
+      if (isInAppBrowser()) {
+        // Facebook / Instagram / Messenger WebViews block blob: URL downloads.
+        // Open the image as a base64 data URL in a new tab so the user can
+        // long-press (mobile) or right-click (desktop) to save it.
+        const dataUrl = await blobToDataUrl(imageBlob);
+        const newTab = window.open();
+        if (newTab) {
+          newTab.document.write(
+            `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Foodie Passport</title></head>` +
+            `<body style="margin:0;background:#1e293b;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;">` +
+            `<p style="color:#f8fafc;font-family:sans-serif;font-size:16px;margin-bottom:12px;">📱 Long-press the image and tap <strong>Save Image</strong> to download.</p>` +
+            `<img src="${dataUrl}" style="max-width:100%;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);" alt="Your Foodie Passport card" />` +
+            `</body></html>`
+          );
+          newTab.document.close();
+          setDownloadStatus("Image opened — long-press to save it.");
+        } else {
+          setDownloadStatus("Please allow pop-ups and try again.");
+        }
+      } else {
+        // Standard browsers: use blob URL + <a download>.
+        const imageUrl = URL.createObjectURL(imageBlob);
+        const link = document.createElement("a");
+        link.download = "foodie-passport-card.png";
+        link.href = imageUrl;
+        link.click();
+        window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60_000);
+        setDownloadStatus("Passport image downloaded.");
+      }
     } catch (error) {
       console.error("Unable to create the food passport image.", error);
       setDownloadStatus("Could not create the image. Please try again.");
