@@ -1,5 +1,7 @@
 import { districts } from "@/data/districts";
 
+export const sharePreviewVersion = "2";
+
 export function parseShareProgress(
   params: Record<string, string | string[] | undefined>,
 ) {

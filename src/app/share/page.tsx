@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import DistrictProgressMap from "@/components/DistrictProgressMap";
 import { siteOrigin } from "@/lib/site";
-import { parseShareProgress } from "@/lib/share-progress";
+import { parseShareProgress, sharePreviewVersion } from "@/lib/share-progress";
 
 type SharePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -16,6 +16,11 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
   const imageUrl = new URL("/api/og", siteOrigin);
   imageUrl.searchParams.set("foods", String(foods));
   imageUrl.searchParams.set("covered", [...coveredDistrictIds].join(","));
+  imageUrl.searchParams.set("card", sharePreviewVersion);
+  const shareUrl = new URL("/share", siteOrigin);
+  shareUrl.searchParams.set("foods", String(foods));
+  shareUrl.searchParams.set("covered", [...coveredDistrictIds].join(","));
+  shareUrl.searchParams.set("card", sharePreviewVersion);
   const title = `My Bangladesh Food Passport — ${foods} foods tasted`;
   const description = `${coveredDistrictIds.size} of 64 districts explored. See my Bangladesh food journey.`;
 
@@ -27,10 +32,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
     openGraph: {
       title,
       description,
-      url: `${siteOrigin}/share?${new URLSearchParams({
-        foods: String(foods),
-        covered: [...coveredDistrictIds].join(","),
-      })}`,
+      url: shareUrl.toString(),
       siteName: "Foodie Passport",
       type: "website",
       images: [{ url: imageUrl.toString(), width: 1200, height: 1500, alt: `Food passport: ${foods} foods and ${coveredDistrictIds.size} districts explored` }],

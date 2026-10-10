@@ -20,6 +20,7 @@ import {
 import DistrictProgressMap from "@/components/DistrictProgressMap";
 import { districts } from "@/data/districts";
 import { createPassportCardSvg, loadEmblemDataUrl, renderPassportCardPng } from "@/lib/passport-card-image";
+import { sharePreviewVersion } from "@/lib/share-progress";
 import { siteOrigin } from "@/lib/site";
 import useFoodPassportStore from "@/store/useFoodPassportStore";
 
@@ -163,6 +164,7 @@ export default function Home() {
     const url = new URL("/share", shareOrigin);
     url.searchParams.set("foods", String(totalTried));
     url.searchParams.set("covered", [...coveredDistrictIds].join(","));
+    url.searchParams.set("card", sharePreviewVersion);
     return url.toString();
   };
 
@@ -211,7 +213,7 @@ export default function Home() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Explore district</p>
                 <h2 className="text-2xl font-bold text-slate-900">{selectedDistrict.name}</h2>
               </div>
-              <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+              <div className="whitespace-nowrap rounded-full bg-emerald-100 px-2 py-1 text-[11px] font-semibold text-emerald-700 sm:px-3 sm:text-xs">
                 {getDistrictProgress(selectedDistrict, triedFoods).status}
               </div>
             </div>
@@ -224,7 +226,7 @@ export default function Home() {
                   aria-expanded={isDistrictListOpen}
                   aria-controls="district-list"
                   onClick={() => setIsDistrictListOpen((isOpen) => !isOpen)}
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+                  className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-2 text-xs font-semibold text-slate-700 transition hover:bg-white sm:gap-2 sm:px-3 sm:text-sm"
                 >
                   {isDistrictListOpen ? "Hide" : "Show"} 64 districts
                   <ChevronDown className={`h-4 w-4 transition-transform ${isDistrictListOpen ? "rotate-180" : ""}`} />
