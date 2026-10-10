@@ -213,18 +213,18 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0d1117] px-4 py-8 text-slate-900 md:px-8">
+    <main className="min-h-screen bg-[#fafaf9] px-4 py-8 text-slate-900 md:px-8">
       <div className="mx-auto max-w-7xl space-y-5">
-        <header className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#131c27] p-6 shadow-passport md:p-8">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-passport-gold/60 to-transparent" />
+        <header className="relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-sm md:p-8">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-passport-gold/40 to-transparent" />
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-passport-gold/30 bg-passport-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-passport-gold">
+              <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-amber-700">
                 <BookUser className="h-3.5 w-3.5" />
                 Bangladesh Food Passport
               </p>
-              <h1 className="text-3xl font-black tracking-tight text-white md:text-5xl">Taste the Flavours of Bangladesh.</h1>
-              <p className="mt-2 text-sm text-slate-400">Track every regional dish across all 64 districts.</p>
+              <h1 className="text-3xl font-black tracking-tight text-slate-900 md:text-5xl">Taste the Flavours of Bangladesh.</h1>
+              <p className="mt-2 text-sm text-slate-500">Track every regional dish across all 64 districts.</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <button
@@ -233,7 +233,7 @@ export default function Home() {
                     resetProgress();
                   }
                 }}
-                className="inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-400 transition hover:bg-rose-500/20"
+                className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-100"
               >
                 <Trash2 className="h-4 w-4" />
                 Reset progress
@@ -243,7 +243,7 @@ export default function Home() {
         </header>
 
         <section>
-          <div className="rounded-[28px] border border-white/8 bg-white p-5 shadow-passport md:p-6">
+          <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Explore district</p>
@@ -385,7 +385,7 @@ export default function Home() {
         </section>
 
         <section>
-          <div className="rounded-[28px] border border-white/8 bg-white p-5 shadow-passport md:p-6">
+          <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Passport dashboard</p>
@@ -446,7 +446,7 @@ export default function Home() {
         </section>
 
         <section className="grid gap-6 2xl:grid-cols-[1.4fr_1fr]">
-          <div className="rounded-[28px] border border-white/8 bg-white p-5 shadow-passport md:p-6">
+          <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Achievements</p>
@@ -475,7 +475,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/8 bg-white p-5 shadow-passport md:p-6">
+          <div className="rounded-[28px] border border-slate-200/80 bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">Shareable card</p>
@@ -487,8 +487,8 @@ export default function Home() {
             </div>
 
             <div className="space-y-4">
-              <div className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-[#fdf4e3] via-[#fff8f4] to-[#f0fdf6] p-5 shadow-inner ring-1 ring-amber-200/50">
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-passport-gold/50 to-transparent" />
+              <div className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-amber-50 via-white to-emerald-50/30 p-5 shadow-inner ring-1 ring-amber-100">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/50 to-transparent" />
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
                     <Image
@@ -500,11 +500,11 @@ export default function Home() {
                       className="h-11 w-11 shrink-0 rounded-xl object-contain shadow-sm"
                     />
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-passport-gold">Foodie Passport</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-amber-700">Foodie Passport</p>
                       <h3 className="mt-0.5 text-lg font-black leading-tight text-slate-900">Bangladesh Food Passport</h3>
                     </div>
                   </div>
-                  <div className="shrink-0 rounded-full border border-amber-300/60 bg-white px-2.5 py-1 text-[11px] font-bold text-passport-gold">
+                  <div className="shrink-0 rounded-full border border-amber-200/60 bg-white px-2.5 py-1 text-[11px] font-bold text-amber-700">
                     {overallPercentage}%
                   </div>
                 </div>
@@ -512,10 +512,10 @@ export default function Home() {
                   <p className="text-base font-bold leading-snug text-slate-800">I have tasted {totalTried} of Bangladesh&apos;s regional food experiences.</p>
                   <p className="mt-1 text-sm text-slate-500">{exploredDistricts} of 64 districts explored.</p>
                 </div>
-                <div className="mt-4 rounded-2xl border border-white/70 bg-white/70 p-3 shadow-sm">
+                <div className="mt-4 rounded-2xl border border-slate-100 bg-white/80 p-3 shadow-sm backdrop-blur-sm">
                   <DistrictProgressMap coveredDistrictIds={coveredDistrictIds} />
                 </div>
-                <div className="mt-4 flex items-center justify-between rounded-xl border border-white/60 bg-white/70 px-4 py-3">
+                <div className="mt-4 flex items-center justify-between rounded-xl border border-slate-100 bg-white/80 px-4 py-3 backdrop-blur-sm">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Status</p>
                     <p className="mt-0.5 font-bold text-slate-800">{totalTried} foods tasted</p>
@@ -528,7 +528,7 @@ export default function Home() {
                 <button
                   onClick={handleDownloadCard}
                   disabled={isDownloadingCard}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#0f1923] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1e2d3d] disabled:cursor-wait disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70"
                 >
                   <Download className="h-4 w-4" />
                   {isDownloadingCard ? "Preparing image…" : "Download PNG"}
