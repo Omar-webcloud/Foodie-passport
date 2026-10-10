@@ -33,7 +33,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
       })}`,
       siteName: "Foodie Passport",
       type: "website",
-      images: [{ url: imageUrl.toString(), width: 1200, height: 630, alt: `Food passport: ${foods} foods and ${coveredDistrictIds.size} districts explored` }],
+      images: [{ url: imageUrl.toString(), width: 1200, height: 1500, alt: `Food passport: ${foods} foods and ${coveredDistrictIds.size} districts explored` }],
     },
     twitter: {
       card: "summary_large_image",
