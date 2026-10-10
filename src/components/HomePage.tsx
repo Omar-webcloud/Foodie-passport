@@ -216,6 +216,83 @@ export default function Home() {
               </div>
             </div>
 
+            <div className="mb-5">
+              <div className="mb-3 flex items-center justify-between gap-4">
+                <p className="text-sm font-semibold text-slate-700">Find another district</p>
+                <button
+                  type="button"
+                  aria-expanded={isDistrictListOpen}
+                  aria-controls="district-list"
+                  onClick={() => setIsDistrictListOpen((isOpen) => !isOpen)}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+                >
+                  {isDistrictListOpen ? "Hide" : "Show"} 64 districts
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isDistrictListOpen ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                  <input
+                    value={query}
+                    onFocus={() => setIsDistrictListOpen(true)}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Search districts or Bengali names"
+                    className="w-full rounded-full border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-0 transition focus:border-amber-300 focus:bg-white"
+                  />
+                </div>
+                <select
+                  aria-label="Filter districts by division"
+                  value={divisionFilter}
+                  onChange={(event) => setDivisionFilter(event.target.value)}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none transition focus:border-amber-300 focus:bg-white"
+                >
+                  {divisionOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+
+              {isDistrictListOpen && (
+                <div id="district-list" className="mt-3 border-t border-slate-100 pt-3">
+                  <div className="max-h-[32rem] space-y-2 overflow-y-auto pr-1">
+                    {filteredDistricts.map((district) => {
+                      const progress = getDistrictProgress(district, triedFoods);
+                      const isSelected = selectedDistrict.id === district.id;
+                      return (
+                        <button
+                          key={district.id}
+                          onClick={() => setSelectedDistrictId(district.id)}
+                          className={`flex w-full items-center justify-between rounded-2xl border p-3 text-left transition ${
+                            isSelected ? "border-amber-300 bg-amber-50" : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white"
+                          }`}
+                        >
+                          <div>
+                            <p className="font-semibold text-slate-800">{district.name}</p>
+                            <p lang="bn" className="font-bengali text-sm text-slate-600">{district.banglaName}</p>
+                            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{district.division}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs font-medium text-slate-500">{progress.done}/{progress.total}</p>
+                            <div className="mt-1 h-2 w-16 overflow-hidden rounded-full bg-slate-200">
+                              <div
+                                className="h-full rounded-full"
+                                style={{ width: `${(progress.done / progress.total) * 100}%`, backgroundColor: progress.color }}
+                              />
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                    {filteredDistricts.length === 0 && (
+                      <p className="py-4 text-center text-sm text-slate-500">No districts match your search.</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="mb-5 space-y-4">
               <div className="rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-rose-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">District</p>
@@ -255,7 +332,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[1.1fr_1.3fr]">
+        <section>
           <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-passport">
             <div className="mb-4 flex items-center justify-between">
               <div>
@@ -312,81 +389,6 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-passport">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">District search</p>
-                <h2 className="text-2xl font-bold text-slate-900">Browse districts</h2>
-              </div>
-              <button
-                type="button"
-                aria-expanded={isDistrictListOpen}
-                aria-controls="district-list"
-                onClick={() => setIsDistrictListOpen((isOpen) => !isOpen)}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
-              >
-                {isDistrictListOpen ? "Hide" : "Show"} 64 districts
-                <ChevronDown className={`h-4 w-4 transition-transform ${isDistrictListOpen ? "rotate-180" : ""}`} />
-              </button>
-            </div>
-
-            <div className="mb-4 flex flex-col gap-3 lg:flex-row">
-              <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
-                <input
-                  value={query}
-                  onFocus={() => setIsDistrictListOpen(true)}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search districts or Bengali names"
-                  className="w-full rounded-full border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-0 transition focus:border-amber-300 focus:bg-white"
-                />
-              </div>
-              <select
-                value={divisionFilter}
-                onChange={(event) => setDivisionFilter(event.target.value)}
-                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none transition focus:border-amber-300 focus:bg-white"
-              >
-                {divisionOptions.map((option) => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-            </div>
-
-            {isDistrictListOpen && (
-              <div id="district-list">
-                <div className="max-h-[32rem] space-y-2 overflow-y-auto pr-1">
-                  {filteredDistricts.map((district) => {
-                    const progress = getDistrictProgress(district, triedFoods);
-                    const isSelected = selectedDistrict.id === district.id;
-                    return (
-                      <button
-                        key={district.id}
-                        onClick={() => setSelectedDistrictId(district.id)}
-                        className={`flex w-full items-center justify-between rounded-2xl border p-3 text-left transition ${
-                          isSelected ? "border-amber-300 bg-amber-50" : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white"
-                        }`}
-                      >
-                        <div>
-                          <p className="font-semibold text-slate-800">{district.name}</p>
-                          <p lang="bn" className="font-bengali text-sm text-slate-600">{district.banglaName}</p>
-                          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{district.division}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs font-medium text-slate-500">{progress.done}/{progress.total}</p>
-                          <div className="mt-1 h-2 w-16 overflow-hidden rounded-full bg-slate-200">
-                            <div
-                              className="h-full rounded-full"
-                              style={{ width: `${(progress.done / progress.total) * 100}%`, backgroundColor: progress.color }}
-                            />
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
         </section>
 
         <section className="grid gap-6 2xl:grid-cols-[1.4fr_1fr]">
