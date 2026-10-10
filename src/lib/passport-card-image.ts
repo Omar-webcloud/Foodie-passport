@@ -25,39 +25,39 @@ export function createPassportCardSvg({
   const percentage = totalFoods > 0 ? Math.round((foodsTried / totalFoods) * 100) : 0;
   const mapPaths = getProgressMapDistricts()
     .map(({ id, path }) => {
-      return `<path d="${path}" fill="${coveredDistrictIds.has(id) ? "#dc4c45" : "#14966b"}" fill-rule="evenodd" stroke="#ffffff" stroke-linejoin="round" stroke-width="2.5"/>`;
+      return `<path d="${path}" fill="${coveredDistrictIds.has(id) ? "#477A58" : "#E5DCCE"}" fill-rule="evenodd" stroke="#ffffff" stroke-linejoin="round" stroke-width="2.5"/>`;
     });
 
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1500" viewBox="0 0 1200 1500">
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#fff1c9"/>
-      <stop offset="52%" stop-color="#fff8f4"/>
-      <stop offset="100%" stop-color="#dff6e9"/>
+      <stop offset="0%" stop-color="#F5EBDD"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E5DCCE"/>
     </linearGradient>
     <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity=".78"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity=".58"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity=".7"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="1500" fill="#f8fafc"/>
-  <rect x="28" y="28" width="1144" height="1444" rx="56" fill="url(#background)" stroke="#ffffff" stroke-width="8"/>
+  <rect width="1200" height="1500" fill="#F5EBDD"/>
+  <rect x="28" y="28" width="1144" height="1444" rx="56" fill="url(#background)" stroke="#E5DCCE" stroke-width="8"/>
   <image href="${escapeXml(emblemDataUrl)}" xlink:href="${escapeXml(emblemDataUrl)}" x="88" y="88" width="136" height="136" preserveAspectRatio="xMidYMid meet"/>
-  <text x="258" y="127" fill="#b45309" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" letter-spacing="5">FOODIE PASSPORT</text>
-  <text x="258" y="193" fill="#0f172a" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800">Bangladesh Food Passport</text>
-  <path d="M88 270H1112" stroke="#ffffff" stroke-width="3"/>
-  <text x="96" y="350" fill="#1e293b" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">I have tasted ${foodsTried} of Bangladesh&apos;s</text>
-  <text x="96" y="408" fill="#1e293b" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">regional food experiences.</text>
-  <text x="96" y="466" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="28">${districtsExplored} of 64 districts explored</text>
-  <rect x="340" y="505" width="520" height="650" rx="32" fill="#ffffff" fill-opacity=".7" stroke="#ffffff" stroke-width="3"/>
+  <text x="258" y="127" fill="#C69A48" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" letter-spacing="5">FOODIE PASSPORT</text>
+  <text x="258" y="193" fill="#173F35" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800">Bangladesh Food Passport</text>
+  <path d="M88 270H1112" stroke="#E5DCCE" stroke-width="3"/>
+  <text x="96" y="350" fill="#292821" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">I have tasted ${foodsTried} of Bangladesh&apos;s</text>
+  <text x="96" y="408" fill="#292821" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">regional food experiences.</text>
+  <text x="96" y="466" fill="#81796D" font-family="Arial, Helvetica, sans-serif" font-size="28">${districtsExplored} of 64 districts explored</text>
+  <rect x="340" y="505" width="520" height="650" rx="32" fill="#ffffff" fill-opacity=".7" stroke="#E5DCCE" stroke-width="3"/>
   <svg x="365" y="520" width="470" height="611" viewBox="${progressMapViewBox}" role="img">
     ${mapPaths.join("")}
   </svg>
-  <rect x="88" y="1215" width="1024" height="170" rx="32" fill="url(#panel)" stroke="#ffffff" stroke-opacity=".9" stroke-width="3"/>
-  <text x="128" y="1274" fill="#64748b" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="4">YOUR JOURNEY</text>
-  <text x="128" y="1338" fill="#1e293b" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700">${foodsTried} foods tasted</text>
-  <rect x="896" y="1260" width="166" height="76" rx="38" fill="#d1fae5"/>
-  <text x="979" y="1299" fill="#047857" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="800" text-anchor="middle" dominant-baseline="middle">${percentage}%</text>
+  <rect x="88" y="1215" width="1024" height="170" rx="32" fill="url(#panel)" stroke="#E5DCCE" stroke-opacity=".9" stroke-width="3"/>
+  <text x="128" y="1274" fill="#81796D" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="4">YOUR JOURNEY</text>
+  <text x="128" y="1338" fill="#173F35" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700">${foodsTried} foods tasted</text>
+  <rect x="896" y="1260" width="166" height="76" rx="38" fill="#DCE6DF"/>
+  <text x="979" y="1299" fill="#477A58" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="800" text-anchor="middle" dominant-baseline="middle">${percentage}%</text>
 </svg>`;
 }
 

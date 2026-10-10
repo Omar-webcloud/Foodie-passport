@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     <path
       key={id}
       d={path}
-      fill={coveredDistrictIds.has(id) ? "#dc4c45" : "#14966b"}
+      fill={coveredDistrictIds.has(id) ? "#477A58" : "#E5DCCE"}
       fillRule="evenodd"
       stroke="#ffffff"
       strokeLinejoin="round"
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
           flexDirection: "column",
           width: 1200,
           height: 1500,
-          backgroundColor: "#f8fafc",
+          backgroundColor: "#F5EBDD",
           padding: 28,
         }}
       >
@@ -50,8 +50,8 @@ export async function GET(request: Request) {
             flexDirection: "column",
             flexGrow: 1,
             borderRadius: 56,
-            backgroundImage: "linear-gradient(to bottom right, #fff1c9 0%, #fff8f4 52%, #dff6e9 100%)",
-            border: "8px solid #ffffff",
+            backgroundImage: "linear-gradient(to bottom right, #F5EBDD 0%, #FFFFFF 50%, #E5DCCE 100%)",
+            border: "8px solid #E5DCCE",
             padding: "60px 88px",
             position: "relative",
           }}
@@ -60,10 +60,10 @@ export async function GET(request: Request) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={emblemSource} width={136} height={136} alt="Emblem" style={{ objectFit: "contain" }} />
             <div style={{ display: "flex", flexDirection: "column", paddingTop: 10 }}>
-              <span style={{ color: "#b45309", fontSize: 25, fontWeight: 700, letterSpacing: 5 }}>
+              <span style={{ color: "#C69A48", fontSize: 25, fontWeight: 700, letterSpacing: 5 }}>
                 FOODIE PASSPORT
               </span>
-              <span style={{ color: "#0f172a", fontSize: 48, fontWeight: 800, marginTop: 10 }}>
+              <span style={{ color: "#173F35", fontSize: 48, fontWeight: 800, marginTop: 10 }}>
                 Bangladesh Food Passport
               </span>
             </div>
@@ -74,21 +74,21 @@ export async function GET(request: Request) {
               marginTop: 40,
               width: "100%",
               height: 3,
-              backgroundColor: "#ffffff",
+              backgroundColor: "#E5DCCE",
             }}
           />
 
           <div style={{ display: "flex", flexDirection: "column", marginTop: 60, gap: 10 }}>
-            <span style={{ color: "#1e293b", fontSize: 42, fontWeight: 700 }}>
+            <span style={{ color: "#292821", fontSize: 42, fontWeight: 700 }}>
               I have tasted {foods} of Bangladesh&apos;s
             </span>
-            <span style={{ color: "#1e293b", fontSize: 42, fontWeight: 700 }}>
+            <span style={{ color: "#292821", fontSize: 42, fontWeight: 700 }}>
               regional food experiences.
             </span>
           </div>
 
           <div style={{ marginTop: 24, display: "flex" }}>
-            <span style={{ color: "#475569", fontSize: 28 }}>
+            <span style={{ color: "#81796D", fontSize: 28 }}>
               {coveredDistrictIds.size} of 64 districts explored
             </span>
           </div>
@@ -120,17 +120,17 @@ export async function GET(request: Request) {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundImage: "linear-gradient(to bottom right, rgba(255,255,255,0.78), rgba(255,255,255,0.58))",
-              border: "3px solid rgba(255,255,255,0.9)",
+              backgroundImage: "linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(255,255,255,0.7))",
+              border: "3px solid #E5DCCE",
               borderRadius: 32,
               padding: "0 50px",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 15 }}>
-              <span style={{ color: "#64748b", fontSize: 21, fontWeight: 700, letterSpacing: 4 }}>
+              <span style={{ color: "#81796D", fontSize: 21, fontWeight: 700, letterSpacing: 4 }}>
                 YOUR JOURNEY
               </span>
-              <span style={{ color: "#1e293b", fontSize: 36, fontWeight: 700 }}>
+              <span style={{ color: "#173F35", fontSize: 36, fontWeight: 700 }}>
                 {foods} foods tasted
               </span>
             </div>
@@ -138,14 +138,14 @@ export async function GET(request: Request) {
             <div
               style={{
                 display: "flex",
-                backgroundColor: "#d1fae5",
+                backgroundColor: "rgba(71, 122, 88, 0.15)",
                 borderRadius: 38,
                 padding: "16px 36px",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <span style={{ color: "#047857", fontSize: 29, fontWeight: 800 }}>
+              <span style={{ color: "#477A58", fontSize: 29, fontWeight: 800 }}>
                 {percentage}%
               </span>
             </div>

@@ -8,7 +8,7 @@ export default function DistrictProgressMap({
   return (
     <svg
       aria-label="Textless map of Bangladesh districts, warm stone for untried and leaf green for covered"
-      className="passport-card-map mx-auto block h-48 w-full max-w-[240px] sm:h-56 sm:max-w-[280px]"
+      className="passport-card-map mx-auto block h-auto w-full max-w-sm p-[15px]"
       role="img"
       viewBox={progressMapViewBox}
       xmlns="http://www.w3.org/2000/svg"
