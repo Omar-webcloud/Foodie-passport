@@ -1,27 +1,28 @@
 # Foodie Passport
 
-A Bangladesh food exploration app built with Next.js, TypeScript, Tailwind CSS, Zustand, and Leaflet. The app helps users discover regional foods across Bangladesh, track what they have tried, and build a personalized "passport" of culinary experiences.
+A Bangladesh food exploration app built with Next.js, TypeScript, Tailwind CSS, and Zustand. The app helps users discover regional foods across Bangladesh, track what they have tried, and build a personalized "passport" of culinary experiences.
 
 ## Overview
 
 Foodie Passport is a local-first travel-and-food tracker for Bangladesh. Users can:
 
-- browse a map of Bangladesh districts
+- browse and search Bangladesh's 64 districts
 - explore district-level food highlights
+- search/filter districts at all times; expand or collapse the district names list
+- view district names in Bengali with a bundled Noto Sans Bengali font
 - mark foods as tried
 - track overall progress across the catalog
 - view milestone achievements
-- export/import progress as JSON
 - share a visual passport card
 
 This project is intentionally backend-free and stores user progress in the browser via localStorage.
+Passport sharing creates a public snapshot URL containing the tried-food total and covered district IDs; it does not expose the owner's local food-by-food records.
 
 ## Features
 
-### District map exploration
-- interactive map with district markers/polygons across Bangladesh
-- quick district selection from the map or district list
-- division-based filtering and district search
+### District exploration
+- quick district selection from the searchable district list
+- persistent division filtering and district search in English or Bengali, with the list expanding on search focus
 
 ### Food tracking
 - check off dishes and specialties per district
@@ -32,14 +33,18 @@ This project is intentionally backend-free and stores user progress in the brows
 - overview cards for explored foods and districts
 - completion meter
 - recent discoveries feed
+- textless progress map on the share card: unexplored districts are green and covered districts are red
 - milestone achievements such as "First Bite" and "Bangladesh Food Master"
 
-### Share and export functionality
-- export progress as JSON for backup or transfer
-- import previously exported progress
+### Sharing and download
 - reset saved passport progress
 - generate a shareable food passport card as a PNG
-- optional native share support when available in the browser
+- share a public passport snapshot through Facebook, WhatsApp, or a copied link
+- provide Open Graph and Twitter preview images with the shared progress map
+
+For deployed social previews, set `NEXT_PUBLIC_SITE_URL` to the canonical public site origin (for example, `https://example.com`). Facebook and WhatsApp fetch the `/share` page and its generated `/api/og` image directly, so localhost links cannot produce public previews. Social networks may cache previews after the first fetch.
+
+The production canonical URL defaults to `https://foodie-passport-bd.vercel.app`. Basic SEO metadata, a sitemap, a robots file, and the passport emblem favicon are configured in the App Router.
 
 ## Tech Stack
 
@@ -48,8 +53,8 @@ This project is intentionally backend-free and stores user progress in the brows
 - TypeScript
 - Tailwind CSS
 - Zustand for state management
-- Leaflet + react-leaflet for map rendering
 - html-to-image for exportable PNG card generation
+- Noto Sans Bengali via Fontsource for Bengali text rendering
 - lucide-react for icons
 
 ## Project Structure
@@ -60,9 +65,21 @@ foodie-passport/
 │   ├── app/
 │   │   ├── globals.css
 │   │   ├── layout.tsx
-│   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── share/page.tsx
+│   │   ├── api/og/route.tsx
+│   │   ├── robots.ts
+│   │   └── sitemap.ts
 │   ├── data/
+│   │   ├── bangladesh-district-boundaries.json
 │   │   └── districts.ts
+│   ├── components/
+│   │   ├── HomePage.tsx
+│   │   └── DistrictProgressMap.tsx
+│   ├── lib/
+│   │   ├── progress-map.ts
+│   │   ├── share-progress.ts
+│   │   └── site.ts
 │   └── store/
 │       └── useFoodPassportStore.ts
 ├── package.json
@@ -116,24 +133,22 @@ Key behaviors:
 
 - progress is stored in localStorage under `foodie-passport-progress`
 - checked foods are keyed as `districtId:foodId`
+- a district is considered covered once any one of its listed foods is marked as tried
 - selected district state is also persisted
-- export/import only handles progress JSON and is designed for local transfer between browsers
 
 ## Notes and assumptions
 
 - The app is a client-first experience and does not use a backend or database.
-- The map uses simplified district polygon overlays rather than a full official district boundary dataset.
+- The share card uses simplified GeoBoundaries district polygons sourced from Bangladesh Bureau of Statistics (BBS) / OCHA ROAP data, distributed under [CC BY 3.0 IGO](https://creativecommons.org/licenses/by/3.0/igo/). Districts are colored green until at least one food is checked, then red. Source: [geoBoundaries Bangladesh ADM2](https://www.geoboundaries.org/api/current/gbOpen/BGD/ADM2/).
 - The catalog is intentionally a curated, app-focused dataset for demo and UX exploration rather than an authoritative geographic or culinary source.
-- Browser-only APIs such as `navigator.share`, `window.localStorage`, and `document` are used only in client-side interactions.
+- Browser-only APIs such as `navigator.clipboard`, `window.localStorage`, and `document` are used only in client-side interactions.
 
 ## Future enhancements
 
 Potential next improvements include:
 
-- real GeoJSON district boundaries for Bangladesh
 - a larger and more accurate district/food catalog
 - richer achievement logic and analytics
-- improved import validation UX
 - accessibility and keyboard navigation polish
 - support for multiple language labels and Bengali localization
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { MapContainer, Polygon, TileLayer } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import * as L from "leaflet";
 
 import { districts } from "@/data/districts";
 
@@ -38,33 +39,52 @@ export default function DistrictMap({
   setSelectedDistrictId: (id: string | null) => void;
   triedFoods: Record<string, boolean>;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const districtLayersRef = useRef<L.LayerGroup | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const map = L.map(containerRef.current, { scrollWheelZoom: true }).setView([23.8, 89.8], 7);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    const districtLayers = L.layerGroup().addTo(map);
+
+    districtLayersRef.current = districtLayers;
+
+    return () => {
+      map.remove();
+      districtLayersRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const districtLayers = districtLayersRef.current;
+    if (!districtLayers) return;
+
+    districtLayers.clearLayers();
+    districts.forEach((district) => {
+      const status = getDistrictProgress(district, triedFoods);
+      const isSelected = selectedDistrictId === district.id;
+      L.polygon(polygonForDistrict(district), {
+        color: isSelected ? "#7c2d12" : status.color,
+        fillColor: status.color,
+        fillOpacity: isSelected ? 0.9 : 0.65,
+        weight: isSelected ? 2.5 : 1.2,
+      })
+        .on("click", () => setSelectedDistrictId(district.id))
+        .addTo(districtLayers);
+    });
+  }, [selectedDistrictId, setSelectedDistrictId, triedFoods]);
+
   return (
-    <div className="h-[420px] w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-passport">
-      <MapContainer center={[23.8, 89.8]} zoom={7} scrollWheelZoom className="h-full w-full" attributionControl>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {districts.map((district) => {
-          const status = getDistrictProgress(district, triedFoods);
-          const isSelected = selectedDistrictId === district.id;
-          return (
-            <Polygon
-              key={district.id}
-              positions={polygonForDistrict(district)}
-              pathOptions={{
-                color: isSelected ? "#7c2d12" : status.color,
-                fillColor: status.color,
-                fillOpacity: isSelected ? 0.9 : 0.65,
-                weight: isSelected ? 2.5 : 1.2,
-              }}
-              eventHandlers={{
-                click: () => setSelectedDistrictId(district.id),
-              }}
-            />
-          );
-        })}
-      </MapContainer>
+    <div
+      ref={containerRef}
+      className="leaflet-container h-[420px] w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-passport"
+      role="application"
+      aria-label="Interactive district map of Bangladesh"
+    >
     </div>
   );
 }

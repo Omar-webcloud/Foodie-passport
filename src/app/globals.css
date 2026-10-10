@@ -17,6 +17,10 @@ body {
   color: #0f172a;
 }
 
+.font-bengali {
+  font-family: "Noto Sans Bengali", Arial, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
