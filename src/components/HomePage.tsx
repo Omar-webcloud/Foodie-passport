@@ -265,7 +265,10 @@ export default function Home() {
                       return (
                         <button
                           key={district.id}
-                          onClick={() => setSelectedDistrictId(district.id)}
+                          onClick={() => {
+                            setSelectedDistrictId(district.id);
+                            setIsDistrictListOpen(false);
+                          }}
                           className={`flex w-full items-center justify-between rounded-2xl border p-3 text-left transition ${
                             isSelected ? "border-amber-300 bg-amber-50" : "border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white"
                           }`}
@@ -321,7 +324,10 @@ export default function Home() {
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between gap-3">
-                          <span className="font-semibold text-slate-800">{food.name}</span>
+                          <div>
+                            <span lang="bn" className="font-bengali font-semibold text-slate-800">{food.banglaName}</span>
+                            <p className="text-sm text-slate-500">{food.name}</p>
+                          </div>
                           {checked && <BadgeCheck className="h-4 w-4 text-emerald-600" />}
                         </div>
                         <p className="mt-1 text-sm text-slate-600">{food.description}</p>
@@ -381,7 +387,8 @@ export default function Home() {
                 recentDiscoveries.map(({ district, food }) => (
                   <div key={`${district.id}-${food.id}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-3">
                     <div>
-                      <p className="font-semibold text-slate-800">{food.name}</p>
+                      <p lang="bn" className="font-bengali font-semibold text-slate-800">{food.banglaName}</p>
+                      <p className="text-sm text-slate-500">{food.name}</p>
                       <p className="text-sm text-slate-500">{district.name}</p>
                     </div>
                     <span className="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700">Saved</span>
