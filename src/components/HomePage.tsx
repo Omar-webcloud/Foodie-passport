@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { toPng } from "html-to-image";
 import {
   BadgeCheck,
   BookUser,
@@ -20,6 +19,7 @@ import {
 
 import DistrictProgressMap from "@/components/DistrictProgressMap";
 import { districts } from "@/data/districts";
+import { createPassportCardSvg, loadEmblemDataUrl, renderPassportCardPng } from "@/lib/passport-card-image";
 import { siteOrigin } from "@/lib/site";
 import useFoodPassportStore from "@/store/useFoodPassportStore";
 
@@ -52,8 +52,9 @@ export default function Home() {
   const [isDistrictListOpen, setIsDistrictListOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareStatus, setShareStatus] = useState("");
+  const [isDownloadingCard, setIsDownloadingCard] = useState(false);
+  const [downloadStatus, setDownloadStatus] = useState("");
   const [shareOrigin, setShareOrigin] = useState(siteOrigin);
-  const shareRef = useRef<HTMLDivElement>(null);
   const shareModalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -128,17 +129,34 @@ export default function Home() {
   ];
 
   const handleDownloadCard = async () => {
-    if (!shareRef.current) return;
+    if (isDownloadingCard) return;
 
-    const dataUrl = await toPng(shareRef.current, {
-      cacheBust: true,
-      pixelRatio: 2,
-    });
+    setIsDownloadingCard(true);
+    setDownloadStatus("");
 
-    const link = document.createElement("a");
-    link.download = "foodie-passport-card.png";
-    link.href = dataUrl;
-    link.click();
+    try {
+      const svgMarkup = createPassportCardSvg({
+        foodsTried: totalTried,
+        districtsExplored: exploredDistricts,
+        totalFoods,
+        coveredDistrictIds,
+        emblemDataUrl: await loadEmblemDataUrl(),
+      });
+      const imageBlob = await renderPassportCardPng(svgMarkup);
+      const imageUrl = URL.createObjectURL(imageBlob);
+
+      const link = document.createElement("a");
+      link.download = "foodie-passport-card.png";
+      link.href = imageUrl;
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60_000);
+      setDownloadStatus("Passport image downloaded.");
+    } catch (error) {
+      console.error("Unable to create the food passport image.", error);
+      setDownloadStatus("Could not create the image. Please try again.");
+    } finally {
+      setIsDownloadingCard(false);
+    }
   };
 
   const getShareUrl = () => {
@@ -409,36 +427,34 @@ export default function Home() {
             </div>
 
             <div className="space-y-3">
-              <div ref={shareRef} className="rounded-[28px] bg-gradient-to-br from-amber-100 via-red-50 to-emerald-50 p-5 shadow-inner">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-3">
+              <div className="passport-card rounded-[24px] bg-gradient-to-br from-amber-100 via-red-50 to-emerald-50 p-4 shadow-inner sm:rounded-[28px] sm:p-5">
+                <div className="passport-card-header flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                  <div className="passport-card-brand flex min-w-0 items-center gap-3">
                       <Image
                         src="/Bangladesh_Passport_Emblem.png"
                         alt="Bangladesh passport emblem"
                         width={48}
                         height={48}
                         unoptimized
-                        className="h-12 w-12 shrink-0 rounded-xl object-contain"
+                        className="passport-card-emblem h-11 w-11 shrink-0 rounded-xl object-contain sm:h-12 sm:w-12"
                       />
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Foodie Passport</p>
-                        <h3 className="mt-1 text-xl font-black text-slate-900 sm:text-2xl">Bangladesh Food Passport</h3>
+                        <h3 className="passport-card-title mt-1 break-words text-lg font-black leading-tight text-slate-900 sm:text-2xl">Bangladesh Food Passport</h3>
                       </div>
-                    </div>
                   </div>
-                  <div className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+                  <div className="passport-card-completion self-start whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
                     {overallPercentage}% complete
                   </div>
                 </div>
-                <div className="mt-5 space-y-2">
-                  <p className="text-xl font-bold text-slate-800">I have tasted {totalTried} of Bangladesh&apos;s regional food experiences.</p>
-                  <p className="text-sm text-slate-600">{exploredDistricts} of 64 districts explored.</p>
+                <div className="mt-4 space-y-2 sm:mt-5">
+                  <p className="passport-card-tagline break-words text-lg font-bold leading-snug text-slate-800 sm:text-xl">I have tasted {totalTried} of Bangladesh&apos;s regional food experiences.</p>
+                  <p className="break-words text-sm leading-relaxed text-slate-600">{exploredDistricts} of 64 districts explored.</p>
                 </div>
-                <div className="mt-4 rounded-2xl border border-white/70 bg-white/60 p-3">
+                <div className="mt-4 rounded-2xl border border-white/70 bg-white/60 p-2.5 sm:p-3">
                   <DistrictProgressMap coveredDistrictIds={coveredDistrictIds} />
                 </div>
-                <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/60 bg-white/70 p-3">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/70 p-3 sm:mt-5">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</p>
                     <p className="mt-1 text-base font-bold text-slate-800">{totalTried} foods tasted</p>
@@ -450,10 +466,11 @@ export default function Home() {
               <div className="flex flex-wrap items-start gap-3">
                 <button
                   onClick={handleDownloadCard}
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  disabled={isDownloadingCard}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70"
                 >
                   <Download className="h-4 w-4" />
-                  Download PNG
+                  {isDownloadingCard ? "Preparing image…" : "Download PNG"}
                 </button>
                 <button
                   type="button"
@@ -468,6 +485,7 @@ export default function Home() {
                   Share
                 </button>
               </div>
+              {downloadStatus && <p role="status" aria-live="polite" className="text-sm text-slate-600">{downloadStatus}</p>}
               <dialog
                 ref={shareModalRef}
                 aria-labelledby="share-modal-title"

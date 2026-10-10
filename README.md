@@ -38,13 +38,14 @@ Passport sharing creates a public snapshot URL containing the tried-food total a
 
 ### Sharing and download
 - reset saved passport progress
-- generate a shareable food passport card as a PNG
-- share a public passport snapshot through Facebook, WhatsApp, or a copied link
+- download a crisp, portrait passport card as a PNG, rendered independently of the phone's screen layout
+- open the responsive share dialog to share a public passport snapshot through Facebook, WhatsApp, or a copied link
 - provide Open Graph and Twitter preview images with the shared progress map
 
 For deployed social previews, set `NEXT_PUBLIC_SITE_URL` to the canonical public site origin (for example, `https://example.com`). Facebook and WhatsApp fetch the `/share` page and its generated `/api/og` image directly, so localhost links cannot produce public previews. Social networks may cache previews after the first fetch.
 
 The production canonical URL defaults to `https://foodie-passport-bd.vercel.app`. Basic SEO metadata, a sitemap, a robots file, and the passport emblem favicon are configured in the App Router.
+The Bangladesh passport emblem in `public/Bangladesh_Passport_Emblem.png` is also used in the downloadable card and social preview.
 
 ## Tech Stack
 
@@ -53,7 +54,7 @@ The production canonical URL defaults to `https://foodie-passport-bd.vercel.app`
 - TypeScript
 - Tailwind CSS
 - Zustand for state management
-- html-to-image for exportable PNG card generation
+- SVG and Canvas APIs for consistent PNG card generation across mobile browsers
 - Noto Sans Bengali via Fontsource for Bengali text rendering
 - lucide-react for icons
 
@@ -83,6 +84,8 @@ foodie-passport/
 │   └── store/
 │       └── useFoodPassportStore.ts
 ├── package.json
+├── public/
+│   └── Bangladesh_Passport_Emblem.png
 ├── tsconfig.json
 ├── next.config.mjs
 ├── postcss.config.mjs
