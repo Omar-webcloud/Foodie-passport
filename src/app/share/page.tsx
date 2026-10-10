@@ -51,7 +51,7 @@ export default async function SharePage({ searchParams }: SharePageProps) {
   const percentage = Math.round((foods / totalFoods) * 100);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#fffaf3,_#f8fafc_40%,_#eef2ff_100%)] px-4 py-12 text-slate-900">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#FFFFFF,_#F5EBDD_40%,_#E5DCCE_100%)] px-4 py-12 text-slate-900">
       <article className="mx-auto max-w-3xl rounded-[28px] border border-white/70 bg-white/90 p-6 shadow-passport md:p-10">
         <div className="flex items-center gap-3">
           <Image

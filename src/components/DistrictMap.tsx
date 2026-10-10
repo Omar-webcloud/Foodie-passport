@@ -13,9 +13,9 @@ function getDistrictProgress(district: (typeof districts)[number], triedFoods: R
   const total = district.foods.length;
   const done = district.foods.filter((food) => triedFoods[getFoodKey(district.id, food.id)]).length;
 
-  if (done === 0) return { total, done, color: "#d6d3d1", status: "Not explored" };
-  if (done < total) return { total, done, color: "#f59e0b", status: "Partially explored" };
-  return { total, done, color: "#10b981", status: "Fully explored" };
+  if (done === 0) return { total, done, color: "#E5DCCE", status: "Not explored" };
+  if (done < total) return { total, done, color: "#B94F32", status: "Partially explored" };
+  return { total, done, color: "#477A58", status: "Fully explored" };
 }
 
 function polygonForDistrict(district: (typeof districts)[number]) {
@@ -68,7 +68,7 @@ export default function DistrictMap({
       const status = getDistrictProgress(district, triedFoods);
       const isSelected = selectedDistrictId === district.id;
       L.polygon(polygonForDistrict(district), {
-        color: isSelected ? "#7c2d12" : status.color,
+        color: isSelected ? "#173F35" : status.color,
         fillColor: status.color,
         fillOpacity: isSelected ? 0.9 : 0.65,
         weight: isSelected ? 2.5 : 1.2,

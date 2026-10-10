@@ -213,7 +213,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#fafaf9] px-4 py-8 text-slate-900 md:px-8">
+    <main className="min-h-screen bg-[#F5EBDD] px-4 py-8 text-slate-900 md:px-8">
       <div className="mx-auto max-w-7xl space-y-5">
         <header className="relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-white p-6 shadow-sm md:p-8">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-passport-gold/40 to-transparent" />
@@ -343,7 +343,7 @@ export default function Home() {
             </div>
 
             <div className="mb-5 space-y-4">
-              <div className="rounded-2xl bg-gradient-to-br from-[#fdf8f0] to-[#f8f4ee] p-4 ring-1 ring-amber-200/60">
+              <div className="rounded-2xl bg-gradient-to-br from-white to-[#F5EBDD] p-4 ring-1 ring-amber-200/60">
                 <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-passport-gold">District info</p>
                 <p lang="bn" className="font-bengali mt-2 text-base font-semibold text-slate-700">{selectedDistrict.banglaName}</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-400">{selectedDistrict.division}</p>
@@ -428,7 +428,7 @@ export default function Home() {
             <div className="mt-6 space-y-3">
               <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">Recent discoveries</h3>
               {recentDiscoveries.length === 0 ? (
-                <p className="rounded-2xl bg-gradient-to-br from-[#fdf8f0] to-[#f8f4ee] p-4 text-sm text-amber-700 ring-1 ring-amber-200/60">No foods marked yet. Pick a district above and start checking off flavours.</p>
+                <p className="rounded-2xl bg-gradient-to-br from-white to-[#F5EBDD] p-4 text-sm text-amber-700 ring-1 ring-amber-200/60">No foods marked yet. Pick a district above and start checking off flavours.</p>
               ) : (
                 recentDiscoveries.map(({ district, food }) => (
                   <div key={`${district.id}-${food.id}`} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-3.5">

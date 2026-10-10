@@ -7,7 +7,7 @@ export default function DistrictProgressMap({
 }) {
   return (
     <svg
-      aria-label="Textless map of Bangladesh districts, green for untried and red for covered"
+      aria-label="Textless map of Bangladesh districts, warm stone for untried and leaf green for covered"
       className="passport-card-map mx-auto block h-48 w-full max-w-[240px] sm:h-56 sm:max-w-[280px]"
       role="img"
       viewBox={progressMapViewBox}
@@ -17,7 +17,7 @@ export default function DistrictProgressMap({
         <path
           key={feature.id}
           d={feature.path}
-          fill={coveredDistrictIds.has(feature.id) ? "#dc4c45" : "#14966b"}
+          fill={coveredDistrictIds.has(feature.id) ? "#477A58" : "#E5DCCE"}
           fillRule="evenodd"
           stroke="#ffffff"
           strokeLinejoin="round"
